@@ -1,4 +1,5 @@
 # views.py
+from django.db.models import Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -44,6 +45,13 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsStaffOrReadOnly]
 
     # ... (search implementation remains the same) ...
+    def get_queryset(self):
+        """Enable search by author name"""
+        queryset = super().get_queryset()
+        search = self.request.query_params.get('search', None)
+        if search:
+            return queryset.filter(name__icontains=search)
+        return queryset
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -64,6 +72,18 @@ class BookViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsStaffOrReadOnly]
 
     # ... (search implementation remains the same) ...
+    def get_queryset(self):
+        """Enable search by title, author, or ISBN"""
+        queryset = super().get_queryset()
+        search = self.request.query_params.get('search', None)
+
+        if search:
+            return queryset.filter(
+                Q(title__icontains=search) |
+                Q(authors__name__icontains=search) |
+                Q(isbn__icontains=search)
+            ).distinct()
+        return queryset
 
 
 class BookCopyViewSet(viewsets.ModelViewSet):
@@ -72,6 +92,21 @@ class BookCopyViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsStaff]
 
     # ... (filter implementation remains the same) ...
+    def get_queryset(self):
+        """Enable filtering by book, status, or condition"""
+        queryset = super().get_queryset()
+        book_id = self.request.query_params.get('book', None)
+        status = self.request.query_params.get('status', None)
+        min_condition = self.request.query_params.get('min_condition', None)
+
+        if book_id:
+            queryset = queryset.filter(book__id=book_id)
+        if status:
+            queryset = queryset.filter(status=status)
+        if min_condition:
+            queryset = queryset.filter(condition_rating__gte=min_condition)
+
+        return queryset
 
 
 class MemberViewSet(viewsets.ModelViewSet):
