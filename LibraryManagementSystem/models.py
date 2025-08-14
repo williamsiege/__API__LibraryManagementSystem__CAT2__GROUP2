@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 class Author(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -63,24 +63,33 @@ class BookCopy(models.Model):
     def __str__(self):
         return f"Copy {self.copy_id} of {self.book.title}"
 
-
-class Member(models.Model):
+class Member(AbstractUser):
     MEMBERSHIP_TYPES = [
         ('standard', 'Standard'),
         ('premium', 'Premium'),
         ('student', 'Student'),
     ]
-
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
     membership_type = models.CharField(max_length=20, choices=MEMBERSHIP_TYPES, default='standard')
     join_date = models.DateField(default=timezone.now)
     phone = models.CharField(max_length=15, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='member')
+    # Add related_name to avoid clashes
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        related_name='library_members',
+        related_query_name='member'
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        related_name='library_members',
+        related_query_name='member'
+    )
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.username
 
 
 class Loan(models.Model):

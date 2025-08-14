@@ -1,8 +1,9 @@
 # serializers.py
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import Author, Genre, Publisher, Book, BookCopy, Member, Loan
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -114,35 +115,41 @@ class BookCopySerializer(serializers.ModelSerializer):
                 )
         return data
 
-
 class MemberSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = Member
-        fields = '__all__'
+        fields = [
+            'id', 'username', 'password', 'email',
+            'first_name', 'last_name', 'membership_type',
+            'join_date', 'phone'
+        ]
         extra_kwargs = {
-            'email': {'validators': []}  # Disable automatic unique validation
+            'email': {'required': True},
+            'join_date': {'read_only': True}
         }
 
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters")
+        return value
+
     def validate_email(self, value):
-        if not '@' in value or '.' not in value.split('@')[-1]:
-            raise serializers.ValidationError("Enter a valid email address")
+        if Member.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Email already exists")
         return value
 
-    def validate_join_date(self, value):
-        if value > timezone.now().date():
-            raise serializers.ValidationError("Join date cannot be in the future")
-        return value
+    def create(self, validated_data):
+        # Hash password before saving
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
 
-    def validate(self, data):
-        # Handle email uniqueness
-        email = data.get('email')
-        if self.instance and email != self.instance.email:
-            if Member.objects.filter(email=email).exists():
-                raise serializers.ValidationError({"email": "This email is already registered"})
-        elif not self.instance and email:
-            if Member.objects.filter(email=email).exists():
-                raise serializers.ValidationError({"email": "This email is already registered"})
-        return data
+    def update(self, instance, validated_data):
+        # Handle password hashing on update
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super().update(instance, validated_data)
 
 
 class LoanSerializer(serializers.ModelSerializer):
