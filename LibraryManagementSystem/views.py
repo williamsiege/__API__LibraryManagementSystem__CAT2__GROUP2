@@ -112,6 +112,7 @@ class BookCopyViewSet(viewsets.ModelViewSet):
 class MemberViewSet(viewsets.ModelViewSet):
     serializer_class = MemberSerializer
     permission_classes = [permissions.IsAuthenticated, IsSelfOrStaff]
+    queryset = Member.objects.all()
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -127,6 +128,7 @@ class MemberViewSet(viewsets.ModelViewSet):
 class LoanViewSet(viewsets.ModelViewSet):
     serializer_class = LoanSerializer
     permission_classes = [permissions.IsAuthenticated]
+    queryset = Loan.objects.all()
 
     def get_queryset(self):
         queryset = Loan.objects.select_related('member', 'book_copy', 'book_copy__book')
