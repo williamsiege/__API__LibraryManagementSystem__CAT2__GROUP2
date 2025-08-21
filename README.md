@@ -6,12 +6,12 @@ Base API path: `/api/library/`
 
 ## Group Members
 
-- Member 1 — ADM No.: <171748>
-- Member 2 — ADM No.: <105241>
-- Member 3 — ADM No.: <170459>
-- Member 4 — ADM No.: <169258>
-- Member 4 — ADM No.: <170417>
-- Member 4 — ADM No.: <172235>
+- Member 1 — ADM No.: 171748
+- Member 2 — ADM No.: 105241
+- Member 3 — ADM No.: 170459
+- Member 4 — ADM No.: 169258
+- Member 4 — ADM No.: 170417
+- Member 4 — ADM No.: 172235
 
 
 ## Quick Start
@@ -210,9 +210,12 @@ pytest --cov=LibraryManagementSystem --cov-report=term-missing
 ```
 
 ### Testing Evidence
-![Django tests passing](docs/screenshots/django-tests.png)
 
 <img src="docs/screenshots/test1.png" alt="Postman run results" width="800">
+
+
+
+
 <img src="docs/screenshots/test2.png" alt="Postman run results" width="800">
 
 
