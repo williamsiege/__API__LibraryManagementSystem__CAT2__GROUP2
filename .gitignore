@@ -1,0 +1,136 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+*.pyd
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Type checkers
+.pyright/
+
+# --- Django ---
+*.log
+local_settings.py
+
+# SQLite (local dev)
+db.sqlite3
+*.sqlite3
+*.sqlite
+*.db
+
+# Django collected/static/media (keep source static/ if you use it)
+media/
+staticfiles/
+static_root/
+
+# App logs
+logs/
+log/
+
+# Django/Env secrets
+.env
+.env.*
+.envrc
+.django_secret_key
+secrets.json
+
+# --- Environments ---
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+.python-version
+
+# --- Editors & IDEs ---
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# Vim/NeoVim
+*.swp
+*.swo
+*.swn
+
+# --- OS junk ---
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+.jupyter/
+
+# --- Misc cache/temp ---
+*.tmp
+*.temp
+*.bak
+
+# --- Optional tools ---
+# If you use Sphinx docs
+docs/_build/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
