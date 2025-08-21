@@ -53,7 +53,7 @@ class BookCopy(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='copies')
     copy_id = models.CharField(max_length=20, unique=True)
-    acquisition_date = models.DateField(default=timezone.now)
+    acquisition_date = models.DateField(default=timezone.localdate)
     status = models.CharField(max_length=20, choices=COPY_STATUS, default='available')
     condition_rating = models.PositiveIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)],
@@ -70,7 +70,7 @@ class Member(AbstractUser):
         ('student', 'Student'),
     ]
     membership_type = models.CharField(max_length=20, choices=MEMBERSHIP_TYPES, default='standard')
-    join_date = models.DateField(default=timezone.now)
+    join_date = models.DateField(default=timezone.localdate)
     phone = models.CharField(max_length=15, blank=True)
     # Add related_name to avoid clashes
     groups = models.ManyToManyField(
@@ -95,7 +95,7 @@ class Member(AbstractUser):
 class Loan(models.Model):
     book_copy = models.ForeignKey(BookCopy, on_delete=models.PROTECT, related_name='loans')
     member = models.ForeignKey(Member, on_delete=models.PROTECT, related_name='loans')
-    loan_date = models.DateField(default=timezone.now)
+    loan_date = models.DateField(default=timezone.localdate)
     due_date = models.DateField()
     return_date = models.DateField(null=True, blank=True)
     fine_amount = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
