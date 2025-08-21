@@ -10,8 +10,8 @@ Base API path: `/api/library/`
 - Member 2 — ADM No.: 105241
 - Member 3 — ADM No.: 170459
 - Member 4 — ADM No.: 169258
-- Member 4 — ADM No.: 170417
-- Member 4 — ADM No.: 172235
+- Member 5 — ADM No.: 170417
+- Member 6 — ADM No.: 172235
 
 
 ## Quick Start
